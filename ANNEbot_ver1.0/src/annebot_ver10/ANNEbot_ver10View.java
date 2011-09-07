@@ -25,6 +25,7 @@ import javax.swing.JFrame;
  * The application's main frame.
  */
 public class ANNEbot_ver10View extends FrameView {
+    private String datafolder;
 
     public ANNEbot_ver10View(SingleFrameApplication app) {
         super(app);
@@ -172,6 +173,7 @@ public class ANNEbot_ver10View extends FrameView {
         jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
         jButton4.setName("jButton4"); // NOI18N
 
+        jButton5.setAction(actionMap.get("weightsEvolution")); // NOI18N
         jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
         jButton5.setName("jButton5"); // NOI18N
 
@@ -211,12 +213,11 @@ public class ANNEbot_ver10View extends FrameView {
                                 .addComponent(jButton6))
                             .addGap(8, 8, 8)
                             .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                                .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                                 .addGroup(mainPanelLayout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jButton5)
                                     .addGap(21, 21, 21))))))
                 .addGap(64, 64, 64))
@@ -362,8 +363,29 @@ public class ANNEbot_ver10View extends FrameView {
     }
 
     @Action
-    public void GraphicalArchEvolution() {
-        
+    public void GraphicalArchEvolution(){
+        try {
+            String datafile = System.getProperty("user.home")+"\\ANNEbot_Devel\\ANNEbot_POC\\annebot\\Data\\graphs\\ArchitectureEvolution\\dist\\ANNEbotCharts.jar";
+            System.out.println(datafile);
+            String command = "java -jar \""+ datafile + "\"";
+//            String command = "java -jar \"C:\\Users\\Dilmi\\Desktop\\ANNEbotCharts\\dist\\ANNEbotCharts.jar\"";
+            Process child = Runtime.getRuntime().exec(command);
+        } catch (IOException ex) {
+            Logger.getLogger(ANNEbot_ver10View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Action
+    public void weightsEvolution() {
+        try {
+            String datafile = System.getProperty("user.home")+"\\ANNEbot_Devel\\ANNEbot_POC\\annebot\\Data\\graphs\\WeightsEvolution\\dist\\ANNEbotCharts.jar";
+            System.out.println(datafile);
+            String command = "java -jar \""+ datafile + "\"";
+//            String command = "java -jar \"C:\\Users\\Dilmi\\Desktop\\ANNEbotCharts\\dist\\ANNEbotCharts.jar\"";
+            Process child = Runtime.getRuntime().exec(command);
+        } catch (IOException ex) {
+            Logger.getLogger(ANNEbot_ver10View.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

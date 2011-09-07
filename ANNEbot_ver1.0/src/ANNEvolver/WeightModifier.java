@@ -26,7 +26,7 @@ import org.jgap.impl.DoubleGene;
  */
 public class WeightModifier {
 
-    private String dataFolder = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\ANNEbot_POC\\Data\\";
+    private String dataFolder = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\annebot\\Data\\";
     private int averageCount;
     private int maxEvolutionsAllowed;
     private double upperThreshold;
