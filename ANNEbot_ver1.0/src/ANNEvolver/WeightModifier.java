@@ -4,7 +4,9 @@
  */
 package ANNEvolver;
 
+import ANN.ANN;
 import Utility.ANNConfiguration;
+import Utility.DataLogger;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -170,6 +172,11 @@ public class WeightModifier {
             } catch (IOException e) {
             }
         }
+        
+        ANN ann = EvolverUtility.getANNfromChromosome(bestChromosome);
+        DataLogger.writeObjectToFile(dataFolder+"graphs\\"+"bestANN"+bestChromosome.size()+".dat", ann);
+        String command = java -jar "C:\Users\Sulantha\ANNEbot_Devel\annebot\NetworkStructure\dist\NetworkStructure.jar
+        Process child = Runtime.getRuntime().exec(command);
 
         return bestChromosome;
     }
