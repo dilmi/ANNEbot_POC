@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ANNEvolver;
 
 import ANN.ANN;
 import Utility.ANNConfiguration;
 import Utility.DataLogger;
 import Utility.Stats;
+import java.io.File;
 import org.jgap.IChromosome;
 
 /**
@@ -16,10 +16,9 @@ import org.jgap.IChromosome;
  * @author dilmi
  */
 public class OptimizedEvolver {
-    private String dataFolder = System.getProperty("user.home")+"\\ANNEbot_Devel\\annebot\\Data\\";
 
+    private String dataFolder = System.getProperty("user.home") + "\\ANNEbot_Devel\\annebot\\Data\\";
     int DEBUG = 0;
-
     private ANN ann;
     private ANN bestANN;
     private ANN comparingANN = null;
@@ -29,19 +28,16 @@ public class OptimizedEvolver {
     private int totalNs;
     int chromosomeLength = 0;
     int populationSize = 20;
-
-    
     private int noOfEvolutions;
-    double []fitnessValue;
+    double[] fitnessValue;
     private double[] validationError;
     int maxHiddenNeurons = 0;
     int numOfModifiableConnections = 0;//=noOfHiddenNs*(noOfOutputNs+noOfInputNs) at the perticular instance.
     private boolean isReachedHundred;
     private boolean finichsedNeuroniteration;
+    String path = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\ANNEbot_POC\\Data\\graphs\\";
 
-    
-
-    public void initialize(int numInputNeurons , int hNCount, int numOutputNeurons, int numEvolutions){
+    public void initialize(int numInputNeurons, int hNCount, int numOutputNeurons, int numEvolutions) {
         //this.ann = new ANN(numInputNeurons,hNCount,numOutputNeurons);
         ANNConfiguration.inputNeuronCountConfig = numInputNeurons;
         ANNConfiguration.hiddenLNeuronCountConfig = hNCount;
@@ -55,11 +51,12 @@ public class OptimizedEvolver {
         fitnessValue = new double[numEvolutions];
         validationError = new double[numEvolutions];
         totalNs = noOfInputNs + noOfHiddenNs + noOfOutputNs;
+
+        clearGraphsFolder(this.path);
+
     }
 
-
-
-    public void train() throws Exception{
+    public void train() throws Exception {
         //Housekeeping Work
         int averageCount = 5;
         int maxEvolutionsAllowed = 100;
@@ -67,8 +64,8 @@ public class OptimizedEvolver {
         WeightModifier wm;
         ConnectionModifier cm = new ConnectionModifier();
         NeuronModifier nm = new NeuronModifier();
-        
-        numOfModifiableConnections = ANNConfiguration.hiddenLNeuronCountConfig*(ANNConfiguration.outputNeuronCountConfig+ANNConfiguration.inputNeuronCountConfig);
+
+        numOfModifiableConnections = ANNConfiguration.hiddenLNeuronCountConfig * (ANNConfiguration.outputNeuronCountConfig + ANNConfiguration.inputNeuronCountConfig);
 //        Configuration conf = new DefaultConfiguration();
 //        //FitnessFunction testFunc = new IrisFitnessFunction();
 //        FitnessFunction testFunc = new IrisFitnessFunction2();
@@ -84,27 +81,27 @@ public class OptimizedEvolver {
                 this.ann = new ANN(noOfInputNs, noOfHiddenNs, noOfOutputNs);
                 initConnectionMatrix();
                 System.out.println("Number of Hidden Neurons : " + noOfHiddenNs);
-            }else{
+            } else {
                 ANNConfiguration.hiddenLNeuronCountConfig = i + 1;
                 noOfInputNs = ANNConfiguration.inputNeuronCountConfig;
                 noOfHiddenNs = ANNConfiguration.hiddenLNeuronCountConfig;
                 noOfOutputNs = ANNConfiguration.outputNeuronCountConfig;
                 this.ann = nm.createNewANN(this.bestANN);
                 System.out.println("Number of Hidden Neurons : " + noOfHiddenNs);
-                
+
             }
-            
+
             for (int j = 0; j < numOfModifiableConnections; j++) {
                 getChromosomeLength();
                 wm = new WeightModifier(averageCount, maxEvolutionsAllowed, upperThreshold);
                 IChromosome bestWeightChromosome = wm.getBestWeightChromosome(chromosomeLength, populationSize);
-                System.out.println("Chromosome Fitness : "+bestWeightChromosome.getFitnessValue());
+                System.out.println("Chromosome Fitness : " + bestWeightChromosome.getFitnessValue());
                 int status = cm.returnStatus(bestWeightChromosome);
                 if (status == 2) {//status = 2 when the evolver found the minimum 100% fit ann
                     isReachedHundred = true;
                 }
-                numOfModifiableConnections = ANNConfiguration.hiddenLNeuronCountConfig*(ANNConfiguration.outputNeuronCountConfig+ANNConfiguration.inputNeuronCountConfig);
-                if ((status == 0)||(status == 2)) {//status = 2 when the evolver found the minimum 100% fit ann
+                numOfModifiableConnections = ANNConfiguration.hiddenLNeuronCountConfig * (ANNConfiguration.outputNeuronCountConfig + ANNConfiguration.inputNeuronCountConfig);
+                if ((status == 0) || (status == 2)) {//status = 2 when the evolver found the minimum 100% fit ann
                     break;
                 }
             }
@@ -114,24 +111,24 @@ public class OptimizedEvolver {
             this.bestANN = Stats.bestPerOneNeuronIteration;
             if (this.comparingANN == null) {
                 comparingANN = this.bestANN;
-            }else{
-                if (comparingANN.getFitness()>this.bestANN.getFitness()) {
+            } else {
+                if (comparingANN.getFitness() > this.bestANN.getFitness()) {
                     finichsedNeuroniteration = true;
                     break;
-                }else{
+                } else {
                     comparingANN = this.bestANN;
                 }
             }
         }
         if (isReachedHundred) {
-            DataLogger.writeObjectToFile(dataFolder+"bestANN.dat", Stats.getBestOne());
-        }else{
-            DataLogger.writeObjectToFile(dataFolder+"bestANN.dat", Stats.getBest());
+            DataLogger.writeObjectToFile(dataFolder + "bestANN.dat", Stats.getBestOne());
+        } else {
+            DataLogger.writeObjectToFile(dataFolder + "bestANN.dat", Stats.getBest());
         }
 
 
         /////
-        
+
 //        Gene[] sampleGenes = new Gene[lengthOfChromosome];
 //        for (int i=0; i<lengthOfChromosome; i++){
 //            sampleGenes[i] = new DoubleGene(conf, -10.0, 10.0);
@@ -194,24 +191,24 @@ public class OptimizedEvolver {
         totalNs = ANNConfiguration.inputNeuronCountConfig + ANNConfiguration.hiddenLNeuronCountConfig + ANNConfiguration.outputNeuronCountConfig;
         noOfInputNs = ANNConfiguration.inputNeuronCountConfig;
         noOfHiddenNs = ANNConfiguration.hiddenLNeuronCountConfig;
-        for(int i = 0; i < noOfInputNs; i++){
-            for(int j = noOfInputNs; j < totalNs;j++){
+        for (int i = 0; i < noOfInputNs; i++) {
+            for (int j = noOfInputNs; j < totalNs; j++) {
                 this.ann.getConnections()[i][j] = true;
             }
         }
-        for(int i = 0; i < noOfHiddenNs; i++){
-            for(int j = noOfInputNs; j < totalNs;j++){
-                if(noOfInputNs+i == j){
+        for (int i = 0; i < noOfHiddenNs; i++) {
+            for (int j = noOfInputNs; j < totalNs; j++) {
+                if (noOfInputNs + i == j) {
                     continue;
-                }else{
-                    this.ann.getConnections()[noOfInputNs+i][j] = true;
+                } else {
+                    this.ann.getConnections()[noOfInputNs + i][j] = true;
                 }
-                    
+
             }
         }
 
-       ANNConfiguration.connectionsConfig = this.ann.getConnections();
-        
+        ANNConfiguration.connectionsConfig = this.ann.getConnections();
+
     }
 
     private void getChromosomeLength() {
@@ -219,17 +216,28 @@ public class OptimizedEvolver {
         noOfInputNs = ANNConfiguration.inputNeuronCountConfig;
         noOfHiddenNs = ANNConfiguration.hiddenLNeuronCountConfig;
         int length = 0;
-        for (int i = 0; i < totalNs; i++){
-            for (int j = 0; j < totalNs; j++){
-                if (this.ann.getConnections()[i][j])
-                    length = length +1;
+        for (int i = 0; i < totalNs; i++) {
+            for (int j = 0; j < totalNs; j++) {
+                if (this.ann.getConnections()[i][j]) {
+                    length = length + 1;
+                }
             }
 
         }
         // Have to add the threasholds to the chromosome
         chromosomeLength = length + noOfHiddenNs + noOfOutputNs;
-        System.out.println("Length = "+chromosomeLength);
+        System.out.println("Length = " + chromosomeLength);
     }
 
-
+    private void clearGraphsFolder(String path) {
+        System.out.println("Clearing old grpah files");
+        File dir = new File(path);
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                System.out.print("Deleting : "+children[i]+" ");
+                System.out.println(new File(path+children[i]).delete());
+            }
+        }
+    }
 }

@@ -24,14 +24,16 @@ import org.jgap.impl.DoubleGene;
  */
 public class WeightModifier {
 
-    private String dataFolder = System.getProperty("user.home") + "\\ANNEbot_Devel\\annebot\\Data\\";
+    private String dataFolder = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\ANNEbot_POC\\Data\\";
     private int averageCount;
     private int maxEvolutionsAllowed;
     private double upperThreshold;
     private IChromosome bestChromosome = null;
-    
+    private double[] bestChromosomeFitnessArray = null;
     private double bestChromosomeScore;
     private double bestChromosomeTestScore;
+    private double bestChromosomeValidationScore;
+    private double bestChromosomeTrainingScore;
     private double weightForValidation = 0.33;
     private double weightForTraining = 0.33;
     private double weightForTesting = 0.33;
@@ -70,12 +72,16 @@ public class WeightModifier {
         conf.setPopulationSize(populationSize);
 
         for (int i = 0; i < averageCount; i++) {
+            double[] currentChromosomeFitnessArray = new double[maxEvolutionsAllowed + 2];
+            currentChromosomeFitnessArray[0] = ANNConfiguration.hiddenLNeuronCountConfig;
+            currentChromosomeFitnessArray[1] = chromosomeLength;
             Genotype population = Genotype.randomInitialGenotype(conf);
             int numOfEvolutionsToThresh = 0;
             for (int j = 0; j < maxEvolutionsAllowed; j++) {
                 numOfEvolutionsToThresh = 0;
                 population.evolve();
                 double fitness = population.getFittestChromosome().getFitnessValue();
+                currentChromosomeFitnessArray[j + 2] = fitness;
                 if (fitness >= upperThreshold) {
                     numOfEvolutionsToThresh = j + 1;
                 }
@@ -94,12 +100,18 @@ public class WeightModifier {
                 bestChromosome = bestChInCurrPop;
                 bestChromosomeScore = score;
                 bestChromosomeTestScore = score_testing;
+                bestChromosomeValidationScore = score_validation;
+                bestChromosomeTrainingScore = score_training;
+                bestChromosomeFitnessArray = currentChromosomeFitnessArray;
 
             } else {
                 if (bestChromosomeScore < score) {
                     bestChromosome = bestChInCurrPop;
                     bestChromosomeScore = score;
                     bestChromosomeTestScore = score_testing;
+                    bestChromosomeValidationScore = score_validation;
+                    bestChromosomeTrainingScore = score_training;
+                    bestChromosomeFitnessArray = currentChromosomeFitnessArray;
                 }
             }
             System.out.println("Scores of this Chromosome : Training :" + score_training + " Validation : " + score_validation + " Testing : " + score_testing + " Final : " + score);
@@ -124,6 +136,39 @@ public class WeightModifier {
             out.write(tdatasetString);
             out.close();
         } catch (IOException e) {
+        }
+
+        String vdatasetString = ANNConfiguration.hiddenLNeuronCountConfig + "," + bestChromosome.size() + "," + bestChromosomeValidationScore + "\n";
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(dataFolder + "graphs/valivsarch.txt", true));
+            out.write(vdatasetString);
+            out.close();
+        } catch (IOException e) {
+        }
+
+        String trdatasetString = ANNConfiguration.hiddenLNeuronCountConfig + "," + bestChromosome.size() + "," + bestChromosomeTrainingScore + "\n";
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(dataFolder + "graphs/trainvsarch.txt", true));
+            out.write(trdatasetString);
+            out.close();
+        } catch (IOException e) {
+        }
+
+        String wEvoldatasetString = bestChromosomeFitnessArray[0] + "," + bestChromosomeFitnessArray[1] + "," + "weightEvol" + (int)bestChromosomeFitnessArray[0]+ "" + (int)bestChromosomeFitnessArray[1] + ".txt" + "\n";
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(dataFolder + "graphs/weightevoindex.txt", true));
+            out.write(wEvoldatasetString);
+            out.close();
+        } catch (IOException e) {
+        }
+
+        for (int i = 2; i < bestChromosomeFitnessArray.length; i++) {
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(dataFolder + "graphs/weightEvol" + (int)bestChromosomeFitnessArray[0] + "" + (int)bestChromosomeFitnessArray[1] + ".txt", true));
+                out.write(String.valueOf(bestChromosomeFitnessArray[i]) + "\n");
+                out.close();
+            } catch (IOException e) {
+            }
         }
 
         return bestChromosome;
