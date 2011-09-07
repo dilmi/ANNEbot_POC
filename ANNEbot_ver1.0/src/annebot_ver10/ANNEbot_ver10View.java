@@ -183,6 +183,7 @@ public class ANNEbot_ver10View extends FrameView {
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
+        jButton6.setAction(actionMap.get("viewFinalArchitecture")); // NOI18N
         jButton6.setText(resourceMap.getString("jButton6.text")); // NOI18N
         jButton6.setActionCommand(resourceMap.getString("jButton6.actionCommand")); // NOI18N
         jButton6.setName("jButton6"); // NOI18N
@@ -382,6 +383,18 @@ public class ANNEbot_ver10View extends FrameView {
             System.out.println(datafile);
             String command = "java -jar \""+ datafile + "\"";
 //            String command = "java -jar \"C:\\Users\\Dilmi\\Desktop\\ANNEbotCharts\\dist\\ANNEbotCharts.jar\"";
+            Process child = Runtime.getRuntime().exec(command);
+        } catch (IOException ex) {
+            Logger.getLogger(ANNEbot_ver10View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Action
+    public void viewFinalArchitecture() {
+        try {
+            String datafile = System.getProperty("user.home")+"\\ANNEbot_Devel\\ANNEbot_POC\\annebot\\Data\\networks\\FinalNetworkStructure\\dist\\NetworkStructure.jar";
+            System.out.println(datafile);
+            String command = "java -jar \""+ datafile + "\"";
             Process child = Runtime.getRuntime().exec(command);
         } catch (IOException ex) {
             Logger.getLogger(ANNEbot_ver10View.class.getName()).log(Level.SEVERE, null, ex);

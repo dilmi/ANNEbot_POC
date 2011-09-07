@@ -193,6 +193,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButton6">
           <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="annebot_ver10.ANNEbot_ver10View" id="viewFinalArchitecture" methodName="viewFinalArchitecture"/>
+            </Property>
             <Property name="text" type="java.lang.String" resourceKey="jButton6.text"/>
             <Property name="actionCommand" type="java.lang.String" resourceKey="jButton6.actionCommand"/>
             <Property name="name" type="java.lang.String" value="jButton6" noResource="true"/>

@@ -36,6 +36,7 @@ public class OptimizedEvolver {
     private boolean isReachedHundred;
     private boolean finichsedNeuroniteration;
     String path = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\annebot\\Data\\graphs\\";
+    String path2 = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\annebot\\Data\\networks\\";
 
     public void initialize(int numInputNeurons, int hNCount, int numOutputNeurons, int numEvolutions) {
         //this.ann = new ANN(numInputNeurons,hNCount,numOutputNeurons);
@@ -53,6 +54,7 @@ public class OptimizedEvolver {
         totalNs = noOfInputNs + noOfHiddenNs + noOfOutputNs;
 
         clearGraphsFolder(this.path);
+        clearGraphsFolder(this.path2);
 
     }
 
@@ -121,9 +123,9 @@ public class OptimizedEvolver {
             }
         }
         if (isReachedHundred) {
-            DataLogger.writeObjectToFile(dataFolder + "bestANN.dat", Stats.getBestOne());
+            DataLogger.writeObjectToFile(path2 + "bestANN.dat", Stats.getBestOne());
         } else {
-            DataLogger.writeObjectToFile(dataFolder + "bestANN.dat", Stats.getBest());
+            DataLogger.writeObjectToFile(path2 + "bestANN.dat", Stats.getBest());
         }
 
 
@@ -235,8 +237,12 @@ public class OptimizedEvolver {
         if (dir.isDirectory()) {
             String[] children = dir.list();
             for (int i = 0; i < children.length; i++) {
-                System.out.print("Deleting : "+children[i]+" ");
-                System.out.println(new File(path+children[i]).delete());
+                if (new File(path + children[i]).isDirectory()) {
+                    continue;
+                } else {
+                    System.out.print("Deleting : " + children[i] + " ");
+                    System.out.println(new File(path + children[i]).delete());
+                }
             }
         }
     }

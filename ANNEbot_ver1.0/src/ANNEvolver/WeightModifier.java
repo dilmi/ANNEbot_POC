@@ -174,10 +174,11 @@ public class WeightModifier {
         }
         
         ANN ann = EvolverUtility.getANNfromChromosome(bestChromosome);
-        DataLogger.writeObjectToFile(dataFolder+"graphs\\"+"bestANN"+bestChromosome.size()+".dat", ann);
-        String command = java -jar "C:\Users\Sulantha\ANNEbot_Devel\annebot\NetworkStructure\dist\NetworkStructure.jar
+        DataLogger.writeObjectToFile(dataFolder+"networks\\"+"immediateANN.dat", ann);
+        String filePath = dataFolder+"networks\\NetworkStructure\\dist\\NetworkStructure.jar";
+        String command = "java -jar \""+filePath+"\"";
+        System.out.println("Com :"+command);
         Process child = Runtime.getRuntime().exec(command);
-
         return bestChromosome;
     }
 }
