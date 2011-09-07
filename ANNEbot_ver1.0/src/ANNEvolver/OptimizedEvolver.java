@@ -35,7 +35,7 @@ public class OptimizedEvolver {
     int numOfModifiableConnections = 0;//=noOfHiddenNs*(noOfOutputNs+noOfInputNs) at the perticular instance.
     private boolean isReachedHundred;
     private boolean finichsedNeuroniteration;
-    String path = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\ANNEbot_POC\\Data\\graphs\\";
+    String path = System.getProperty("user.home") + "\\ANNEbot_Devel\\ANNEbot_POC\\annebot\\Data\\graphs\\";
 
     public void initialize(int numInputNeurons, int hNCount, int numOutputNeurons, int numEvolutions) {
         //this.ann = new ANN(numInputNeurons,hNCount,numOutputNeurons);

@@ -1,1 +1,10 @@
 1.0,23.0,weightEvol123.txt
+1.0,22.0,weightEvol122.txt
+1.0,21.0,weightEvol121.txt
+2.0,28.0,weightEvol228.txt
+2.0,27.0,weightEvol227.txt
+2.0,26.0,weightEvol226.txt
+2.0,25.0,weightEvol225.txt
+2.0,24.0,weightEvol224.txt
+3.0,30.0,weightEvol330.txt
+3.0,29.0,weightEvol329.txt
